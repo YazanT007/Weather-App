@@ -1,7 +1,10 @@
 body{
     color: white;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    
+    background-image: url(./assets/background.png);
+    background-size: cover; 
+    /* background-position: center;  */
+    background-repeat: no-repeat;
 }    
 
 .container {
@@ -12,13 +15,10 @@ body{
     margin: auto;
     margin-top: 90px ;
     width: 1000px;
-    height: 500px;
+    height: 520px;
     border-radius: 20px;
     box-shadow: 10px 10px 10px black;
-    background-image:url(./assets/anime-night.jpg);
-    background-repeat: no-repeat; 
-    background-position: center center; 
-    background-size: cover; 
+    background-color: #1C2129;
 }
     
 .city {
@@ -26,7 +26,7 @@ body{
     grid-row: span 3 / span 3;
     grid-column-start: 1;
     grid-row-start: 1;
-    background-color: rgba(128, 128, 128, 0.552);
+    background-color: #2C343D;
     border-radius: 20px;
     margin-left: 8px ;
     margin-top: 8px ;
@@ -64,8 +64,11 @@ body{
     outline: none;
     width: 220px;
     font-size: 14px;
-}
+    background-color: #1C2129;
+    color: white;
+    font-weight: 550;
 
+}
 
 #search {
     padding: 10px 15px;
@@ -73,12 +76,14 @@ body{
     border-radius: 0 20px 20px 0;
     font-size: 14px;
     cursor: pointer;
-    background-color: rgb(213, 233, 252);
+    background-color: rgb(31, 173, 245);
     transition: ease-in-out 0.2s;
+    color: white;
+    font-weight:500;
 }
 
 #search:hover{
-    background-color: rgb(192, 221, 248);
+    background-color: rgb(29, 142, 198);
 }
 
 
@@ -105,7 +110,7 @@ body{
     grid-column-start: 1;
     grid-row-start: 5;
     border-radius: 20px;
-    background-color: rgba(127, 128, 128, 0.552);
+    background-color: #2C343D;
     margin-left: 8px ;
     height: 200px;
     width: 640px;
@@ -119,7 +124,7 @@ body{
     grid-row: span 7 / span 7;
     grid-column-start: 5;
     grid-row-start: 2;
-    background-color: rgba(128, 128, 128, 0.552);
+    background-color: #2C343D;
     border-radius: 20px;
     margin-right: 11px ;
     margin-top: -60px;
