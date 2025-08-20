@@ -136,6 +136,59 @@ body{
     
 }
 
+.air-condition{
+    display: flex;
+    align-items: center;
+    margin-left: 25px; 
+}
+
+.air-condition, p{
+    color: #aaa;
+}
+
+#see-more{
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: rgb(31, 173, 245);
+    transition: ease-in-out 0.2s;
+    color: white;
+    font-weight:500; 
+    margin-left: 335px;
+}
+
+.weather-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 40px;
+}
+
+.stat1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.label1 {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #aaa;
+    margin-left: 25px;
+    gap: 6px;
+}
+
+.value1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 45px;
+}
+
+.icons{
+    width: 25px;
+}
+
 /* ---------------------------------------------------- */
 .forecast {
     grid-column: span 2 / span 2;
@@ -149,6 +202,7 @@ body{
     width: 300px;
     height: 450px;
 }
+
 
         
         
