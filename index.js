@@ -28,7 +28,7 @@ async function getCoordinates(city) {
 }
 
 async function getWeatherData(lat, lon) {
-    const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max&timezone=auto`;
+    const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,wind_speed_10m&daily=precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto`;
     const response = await fetch(weatherURL);
     if (!response.ok) throw new Error("Weather data fetch failed");
     const data = await response.json();
@@ -39,11 +39,39 @@ async function getWeatherData(lat, lon) {
 function displayWeatherInfo(data, city) {
     document.getElementById("city-display").textContent = capitalizeFirstLetter(city);
 
-    const todayTemp = Math.round(data.daily.temperature_2m_max[0]);
+    const todayTemp = Math.round(data.current.temperature_2m);
     document.getElementById("temp").textContent = `${todayTemp}° C`;
 
     const cityDate = getCityDate(data.timezone);
     document.getElementById("date").textContent = getFormatDate(cityDate);
+
+    const realFeel = Math.round(data.current.apparent_temperature);
+    document.getElementById("real-feel").textContent = realFeel;
+
+    const windSpeed = Math.round(data.current.wind_speed_10m);
+    document.getElementById("wind").textContent = `${windSpeed} km/h`;
+
+    const sunRise = new Date(data.daily.sunrise[0] ).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+    });
+    document.getElementById("sunrise").textContent = sunRise;
+
+    const sunSet = new Date(data.daily.sunset[0] ).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+    });
+    document.getElementById("sunset").textContent = sunSet;
+
+    const uvIndex = Math.round(data.daily.uv_index_max[0]);
+    document.getElementById("uv").textContent = uvIndex;
+
+    const rainChance = data.daily.precipitation_probability_max[0];
+    document.getElementById("chance-of-rain").textContent = `${rainChance}%`;
+
+
 }
 
 function capitalizeFirstLetter(str) {
@@ -60,9 +88,9 @@ function getCityDate(timezone) {
     return cityDate;
 }
 
-function getFormatDate(date){
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function getFormatDate(date) {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const dayName = days[date.getDay()];
     const day = date.getDate();
@@ -70,9 +98,9 @@ function getFormatDate(date){
     const year = date.getFullYear();
 
     let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2,"0");
-    const AMPM = hours >=12 ? "PM" : "AM";
-    hours = hours % 12 || 12 
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const AMPM = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12
 
     return `${dayName}, ${day} ${monthName} ${year} | ${hours}:${minutes} ${AMPM}`;
 }
