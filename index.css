@@ -34,7 +34,7 @@ body{
     background-color: #202b3b;
     border-radius: 20px;
     margin-left: 8px ;
-    margin-top: 8px ;
+    margin-top: 15px ;
     padding: 20px;
     height: 200px;
     width: 600px;
@@ -135,9 +135,9 @@ body{
     border-radius: 20px;
     background-color: #202b3b;
     margin-left: 8px ;
-    height: 200px;
+    height: 210px;
     width: 640px;
-    margin-top: -40px;
+    margin-top: -30px;
     
 }
 
@@ -151,23 +151,6 @@ body{
     color: #aaa;
     font-weight: 500;
     font-size: 14px;
-}
-
-#see-more{
-    padding: 5px 10px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: rgb(31, 173, 245);
-    transition: ease-in-out 0.2s;
-    color: white;
-    font-weight:500; 
-    margin-left: 335px;
-}
-
-#see-more:hover{
-    background-color: rgb(29, 142, 198);
 }
 
 .weather-stats {
@@ -221,13 +204,33 @@ body{
     font-weight: 500;
 }
 
-.stat2{
-    display: flex;
+.weather-forecast {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.label2{
-    margin: 0px 39.1px 16px 16px;
-    
+.stat2 {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 0.5fr;
+    align-items: center;
+    font-size: 14px;
+    padding: 4px 12px;
+    margin-bottom: -4px;
+}
+
+.stat2 span {
+    text-align: left; 
+}
+
+.stat2 span:nth-child(2) {
+    text-align: center; 
+    margin-left: -20px;
+}
+
+.stat2 span:nth-child(3) {
+    text-align: right; 
+    margin-right: 4px;
 }
 
 hr{
