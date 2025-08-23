@@ -52,14 +52,14 @@ function displayWeatherInfo(data, city) {
     const windSpeed = Math.round(data.current.wind_speed_10m);
     document.getElementById("wind").textContent = `${windSpeed} km/h`;
 
-    const sunRise = new Date(data.daily.sunrise[0] ).toLocaleTimeString("en-US", {
+    const sunRise = new Date(data.daily.sunrise[0]).toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
         hour12: true
     });
     document.getElementById("sunrise").textContent = sunRise;
 
-    const sunSet = new Date(data.daily.sunset[0] ).toLocaleTimeString("en-US", {
+    const sunSet = new Date(data.daily.sunset[0]).toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
         hour12: true
@@ -107,22 +107,58 @@ function getFormatDate(date) {
 }
 
 const weatherIcons = {
-    0: { icon: "☀️", desc: "Sunny" },
-    1: { icon: "🌤️", desc: "Mainly Sunny" },
-    2: { icon: "⛅", desc: "Partly Cloudy" },
-    3: { icon: "☁️", desc: "Cloudy" },
+    // Clear sky
+    0: { icon: "☀️", desc: "Clear sky" },
+
+    // Mainly clear, partly cloudy, overcast
+    1: { icon: "🌤️", desc: "Mainly clear" },
+    2: { icon: "⛅", desc: "Partly cloudy" },
+    3: { icon: "☁️", desc: "Overcast" },
+
+    // Fog
     45: { icon: "🌫️", desc: "Fog" },
-    51: { icon: "🌦️", desc: "Light Rain" },
-    61: { icon: "🌧️", desc: "Rain" },
-    71: { icon: "🌨️", desc: "Snow" },
-    95: { icon: "⛈️", desc: "Thunderstorm" }
+    48: { icon: "🌫️", desc: "Depositing rime fog" },
+
+    // Drizzle
+    51: { icon: "🌦️", desc: "Light drizzle" },
+    53: { icon: "🌦️", desc: "Moderate drizzle" },
+    55: { icon: "🌦️", desc: "Dense drizzle" },
+    56: { icon: "🌧️", desc: "Light freezing drizzle" },
+    57: { icon: "🌧️", desc: "Dense freezing drizzle" },
+
+    // Rain
+    61: { icon: "🌧️", desc: "Slight rain" },
+    63: { icon: "🌧️", desc: "Moderate rain" },
+    65: { icon: "🌧️", desc: "Heavy rain" },
+    66: { icon: "🌧️❄️", desc: "Light freezing rain" },
+    67: { icon: "🌧️❄️", desc: "Heavy freezing rain" },
+
+    // Snowfall
+    71: { icon: "🌨️", desc: "Slight snow" },
+    73: { icon: "🌨️", desc: "Moderate snow" },
+    75: { icon: "❄️", desc: "Heavy snow" },
+    77: { icon: "🌨️", desc: "Snow grains" },
+
+    // Rain showers
+    80: { icon: "🌦️", desc: "Slight rain showers" },
+    81: { icon: "🌦️", desc: "Moderate rain showers" },
+    82: { icon: "🌧️🌧️", desc: "Violent rain showers" },
+
+    // Snow showers
+    85: { icon: "🌨️", desc: "Slight snow showers" },
+    86: { icon: "❄️", desc: "Heavy snow showers" },
+
+    // Thunderstorm
+    95: { icon: "⛈️", desc: "Thunderstorm" },
+    96: { icon: "⛈️🌨️", desc: "Thunderstorm with slight hail" },
+    99: { icon: "⛈️❄️", desc: "Thunderstorm with heavy hail" }
 };
 
 function displayForecast(data) {
     const forecastContainer = document.getElementById("forecast");
-    forecastContainer.innerHTML = ""; 
+    forecastContainer.innerHTML = "";
 
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thurs", "Fri", "Sat"];
 
     for (let i = 0; i < 7; i++) {
         const date = new Date(data.daily.time[i]);
@@ -131,13 +167,15 @@ function displayForecast(data) {
         const code = data.daily.weathercode[i];
         const weather = weatherIcons[code] || { icon: "❓", desc: "Unknown" };
 
+        const iconInfo = weatherIcons[code] || { icon: "❓" };
+        document.getElementById("weather-icon").textContent = iconInfo.icon;
+
         const forecastItem = document.createElement("div");
         forecastItem.classList.add("stat2");
         forecastItem.innerHTML = `
             <span>${dayName}</span>
             <span>${weather.icon} ${weather.desc}</span>
-            <span>${temp}°</span>
-        `;
+            <span>${temp}°</span>`;
         forecastContainer.appendChild(forecastItem);
 
         if (i < 6) {
@@ -146,4 +184,43 @@ function displayForecast(data) {
         }
     }
 }
+
+window.onload = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            async position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                try {
+                    // Fetch weather data for current location
+                    const weatherData = await getWeatherData(lat, lon);
+
+                    const geoURL = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+                    const response = await fetch(geoURL);
+                    const locationData = await response.json();
+                    const city = locationData.address.city ||
+                        locationData.address.town ||
+                        locationData.address.village ||
+                        locationData.address.state || "Your Location";
+
+                    displayWeatherInfo(weatherData, city);
+
+                } catch (err) {
+                    console.error("Error fetching location weather:", err);
+                }
+            },
+            () => {
+                // If user denies location, default to Sydney just because I live here :)
+                getCoordinates("Sydney").then(coords => {
+                    getWeatherData(coords.lat, coords.lon).then(data => {
+                        displayWeatherInfo(data, "Sydney");
+                    });
+                });
+            }
+        );
+    } else {
+        alert("Geolocation not supported by your browser.");
+    }
+};
 
