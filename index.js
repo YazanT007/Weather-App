@@ -28,11 +28,12 @@ async function getCoordinates(city) {
 }
 
 async function getWeatherData(lat, lon) {
-    const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,wind_speed_10m&daily=precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto`;
+    const weatherURL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto`;
     const response = await fetch(weatherURL);
     if (!response.ok) throw new Error("Weather data fetch failed");
     const data = await response.json();
     console.log(data);
+    displayForecast(data);
     return data;
 }
 
@@ -103,5 +104,46 @@ function getFormatDate(date) {
     hours = hours % 12 || 12
 
     return `${dayName}, ${day} ${monthName} ${year} | ${hours}:${minutes} ${AMPM}`;
+}
+
+const weatherIcons = {
+    0: { icon: "☀️", desc: "Sunny" },
+    1: { icon: "🌤️", desc: "Mainly Sunny" },
+    2: { icon: "⛅", desc: "Partly Cloudy" },
+    3: { icon: "☁️", desc: "Cloudy" },
+    45: { icon: "🌫️", desc: "Fog" },
+    51: { icon: "🌦️", desc: "Light Rain" },
+    61: { icon: "🌧️", desc: "Rain" },
+    71: { icon: "🌨️", desc: "Snow" },
+    95: { icon: "⛈️", desc: "Thunderstorm" }
+};
+
+function displayForecast(data) {
+    const forecastContainer = document.getElementById("forecast");
+    forecastContainer.innerHTML = ""; 
+
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(data.daily.time[i]);
+        const dayName = i === 0 ? "Today" : days[date.getDay()];
+        const temp = Math.round(data.daily.temperature_2m_max[i]);
+        const code = data.daily.weathercode[i];
+        const weather = weatherIcons[code] || { icon: "❓", desc: "Unknown" };
+
+        const forecastItem = document.createElement("div");
+        forecastItem.classList.add("stat2");
+        forecastItem.innerHTML = `
+            <span>${dayName}</span>
+            <span>${weather.icon} ${weather.desc}</span>
+            <span>${temp}°</span>
+        `;
+        forecastContainer.appendChild(forecastItem);
+
+        if (i < 6) {
+            const hr = document.createElement("hr");
+            forecastContainer.appendChild(hr);
+        }
+    }
 }
 
