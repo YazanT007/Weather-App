@@ -42,6 +42,6 @@ Users can search for any **city or country** and instantly view current weather 
 
 ## 🚀 Try It Out
 
-👉 [Click here to try the Weather App](https://weather-app-production-177c.up.railway.app/)  
+👉 [Click here to try the Weather App](https://eloquent-lamington-6be5a8.netlify.app/)  
 
 ---
