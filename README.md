@@ -5,7 +5,7 @@ Users can search for any **city or country** and instantly view current weather 
 
 ---
 
-## 🌍 Features
+## Features
 
 - **Search by city/country** → fetches accurate weather data for the selected location.  
 - **Current Weather Information**:
@@ -26,7 +26,7 @@ Users can search for any **city or country** and instantly view current weather 
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **HTML5** → structure  
 - **CSS3** → styling & layout  
@@ -34,13 +34,13 @@ Users can search for any **city or country** and instantly view current weather 
 
 ---
 
-## 📸 App Preview
+## App Preview
 
 <img width="1358" height="728" alt="image" src="https://github.com/user-attachments/assets/ef2001f8-b20b-45b9-9399-c46a0f722d66" />
 
 ---
 
-## 🚀 Try It Out
+## Try It Out
 
 👉 [Click here to try the Weather App](https://weatherapp-made-by-yazant007.netlify.app/)  
 
